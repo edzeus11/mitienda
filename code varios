@@ -1,0 +1,81 @@
+# 🍕 Pizzería Pedronni 24/7 – Sitio Web
+
+Sitio web moderno para la pizzería **Pedronni 24/7**, desarrollada con HTML + Tailwind CSS + JavaScript. Incluye un sistema de carrito de compras y un formulario de contacto funcional, con backend sin servidor desplegado en **Vercel**.
+
+---
+
+## 🚀 Funcionalidades
+
+- 🎨 Frontend responsive con Tailwind CSS
+- 🛒 Carrito de compras dinámico (almacenado en `localStorage`)
+- 📩 Formulario de contacto con backend funcional (`/api/contact`)
+- ♿ Accesibilidad mejorada con etiquetas `aria` y roles HTML5
+- 🌙 Preparado para producción y despliegue en Vercel
+
+---
+
+## 📁 Estructura del Proyecto
+
+
+---
+
+## 🧪 Probar Localmente
+
+Puedes abrir el archivo `index.html` directamente en el navegador.  
+> Asegúrate de desplegar el backend (`/api/contact`) para que el formulario funcione correctamente.
+
+---
+
+## ☁️ Despliegue en Producción (Vercel)
+
+1. Sube el proyecto a un repositorio en GitHub.
+2. Ve a [https://vercel.com/import](https://vercel.com/import) e importa tu repo.
+3. Vercel detectará automáticamente el archivo `api/contact.js` como función serverless.
+4. ¡Listo! Tu sitio quedará disponible en una URL como `https://pizzeria247.vercel.app`.
+
+---
+
+## 📬 Backend: API de Contacto
+
+El archivo `api/contact.js` recibe los datos del formulario:
+
+```js
+// POST /api/contact
+{
+  name: "Juan",
+  email: "juan@mail.com",
+  message: "Quiero reservar 5 pizzas para mañana"
+}
+{
+  "success": true,
+  "message": "Mensaje recibido"
+}
+// api/contact.js
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
+
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Todos los campos son requeridos' });
+  }
+
+  try {
+    // Aquí podrías conectar con un servicio externo (email, base de datos, etc.)
+    console.log('Nuevo mensaje de contacto:', {
+      nombre: name,
+      correo: email,
+      mensaje: message
+    });
+
+    // Respuesta de éxito
+    return res.status(200).json({ success: true, message: 'Mensaje recibido' });
+
+  } catch (error) {
+    console.error('Error en la API de contacto:', error);
+    return res.status(500).json({ error: 'Error del servidor' });
+  }
+}
